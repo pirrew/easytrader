@@ -570,7 +570,6 @@ class ClientTrader(IClientTrader):
                 title = self._get_pop_dialog_title()
             except pywinauto.findwindows.ElementNotFoundError:
                 return {"message": "success"}
-
             result = handler.handle(title)
             if result:
                 return result
