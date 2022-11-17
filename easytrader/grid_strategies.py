@@ -113,20 +113,26 @@ class Copy(BaseStrategy):
                     captcha_num = "".join(captcha_num.split())
                     logger.info("captcha result-->" + captcha_num)
                     if len(captcha_num) == 4:
-                        self._trader.app.top_window().window(
+                        editor = self._trader.app.top_window().window(
                             control_id=0x964, class_name="Edit"
-                        ).set_text(
-                            captcha_num
-                        )  # 模拟输入验证码
+                            )
+                        editor.select()
+                        editor.type_keys(captcha_num)
 
                         self._trader.app.top_window().set_focus()
-                        pywinauto.keyboard.SendKeys("{ENTER}")  # 模拟发送enter，点击确定
+                        pywinauto.keyboard.send_keys("{ENTER}")  # 模拟发送enter，点击确定
                         try:
-                            logger.info(
-                                self._trader.app.top_window()
-                                    .window(control_id=0x966, class_name="Static")
-                                    .window_text()
-                            )
+                            if (
+                                    self._trader.app.top_window().window(class_name="Static", title_re="验证码").exists(timeout=0.1)
+                            ):
+                                logger.info(
+                                    self._trader.app.top_window()
+                                        .window(control_id=0x966, class_name="Static")
+                                        .window_text()
+                                )
+                            else:
+                                found = True
+                                break
                         except Exception as ex:  # 窗体消失
                             logger.exception(ex)
                             found = True
