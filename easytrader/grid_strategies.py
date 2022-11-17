@@ -149,12 +149,11 @@ class Copy(BaseStrategy):
         count = 5
         while count > 0:
             try:
-                dta = pywinauto.clipboard.GetData()
-                return dta
+                return pywinauto.clipboard.GetData()
             # pylint: disable=broad-except
             except Exception as e:
                 count -= 1
-                logger.exception("%s, retry ......", e)          
+                logger.exception("%s, retry ......", e)
 
 
 class WMCopy(Copy):
